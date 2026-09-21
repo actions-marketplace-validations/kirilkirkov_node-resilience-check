@@ -1,0 +1,13 @@
+{
+  "name": "fixed-service",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A small HTTP service with the same endpoints as broken-service, with every resilience bug fixed.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

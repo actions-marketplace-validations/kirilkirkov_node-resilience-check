@@ -1,0 +1,13 @@
+{
+  "name": "broken-service",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A small HTTP service with intentional resilience bugs, used to demo ResilienceCheck.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

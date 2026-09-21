@@ -1,0 +1,51 @@
+name: Bug report
+description: Something does not work, or a check reported a wrong result.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this. False positives and false negatives
+        from real services are especially valuable — please include as much as you can share.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of problem
+      options:
+        - A check reported a problem that does not exist (false positive)
+        - A check missed a real problem (false negative)
+        - Crash, hang or leftover process
+        - Configuration or CLI behaviour
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Terminal output
+      description: Output of `resilience-check verify` (add `--verbose` to include service logs).
+      render: text
+  - type: textarea
+    id: config
+    attributes:
+      label: Configuration
+      description: Your resiliencecheck.config.json, with anything sensitive removed.
+      render: json
+  - type: textarea
+    id: service
+    attributes:
+      label: Service details
+      description: Framework (Express, Fastify, …), how it is started, and a minimal reproduction if possible.
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      placeholder: node-resilience-check 0.1.0, Node.js 22.12.0, macOS 15
+    validations:
+      required: true

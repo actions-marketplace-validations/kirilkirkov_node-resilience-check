@@ -1,0 +1,79 @@
+{
+  "name": "node-resilience-check",
+  "version": "0.1.0",
+  "description": "Open-source resilience testing CLI for Node.js and TypeScript services. Detect backpressure bugs, retry storms, event-loop blocking, race conditions, graceful shutdown failures, and microservice reliability issues.",
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "resilience",
+    "microservices",
+    "testing",
+    "backpressure",
+    "race-condition",
+    "chaos-engineering",
+    "reliability",
+    "fault-injection",
+    "event-loop",
+    "graceful-shutdown",
+    "retry",
+    "cli"
+  ],
+  "license": "MIT",
+  "author": "Kiril Kirkov",
+  "homepage": "https://github.com/kirilkirkov/node-resilience-check#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kirilkirkov/node-resilience-check.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kirilkirkov/node-resilience-check/issues"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "packageManager": "pnpm@12.5.1",
+  "bin": {
+    "resilience-check": "dist/cli/index.js",
+    "node-resilience-check": "dist/cli/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "build": "pnpm clean && tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write .",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:integration": "vitest run --project integration",
+    "demo": "pnpm build && node scripts/demo.mjs broken-service",
+    "demo:fixed": "pnpm build && node scripts/demo.mjs fixed-service",
+    "prepublishOnly": "pnpm lint && pnpm typecheck && pnpm build && pnpm test"
+  },
+  "dependencies": {
+    "commander": "^15.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.20.4",
+    "eslint": "^10.11.0",
+    "globals": "^17.12.0",
+    "prettier": "^3.9.8",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.70.0",
+    "vitest": "^5.0.1"
+  }
+}
