@@ -1,6 +1,6 @@
 {
   "name": "node-resilience-check",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Open-source resilience testing CLI for Node.js and TypeScript services. Detect backpressure bugs, retry storms, event-loop blocking, race conditions, graceful shutdown failures, and microservice reliability issues.",
   "keywords": [
     "nodejs",

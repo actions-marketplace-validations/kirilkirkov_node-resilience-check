@@ -51,7 +51,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 var define_BUNDLED_MANIFEST_default;
 var init_define_BUNDLED_MANIFEST = __esm({
   "<define:BUNDLED_MANIFEST>"() {
-    define_BUNDLED_MANIFEST_default = { name: "node-resilience-check", version: "0.1.0" };
+    define_BUNDLED_MANIFEST_default = { name: "node-resilience-check", version: "0.1.1" };
   }
 });
 

@@ -6,6 +6,8 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-25
+
 ### Added
 
 - GitHub Action (`uses: kirilkirkov/node-resilience-check@v1`) with `config`, `only`, `seed`,
@@ -37,5 +39,6 @@ First public version.
 - Versioned JSON report (`--json`), automatic plain output without a TTY or with `NO_COLOR`.
 - Runnable `broken-service` and `fixed-service` examples.
 
-[Unreleased]: https://github.com/kirilkirkov/node-resilience-check/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/kirilkirkov/node-resilience-check/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/kirilkirkov/node-resilience-check/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/kirilkirkov/node-resilience-check/releases/tag/v0.1.0

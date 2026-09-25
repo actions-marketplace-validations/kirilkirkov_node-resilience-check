@@ -1,5 +1,5 @@
 name: ResilienceCheck
-description: Break your Node.js service before production does.
+description: Test Node.js services for event-loop blocking, retry storms, backpressure, concurrency bugs, and broken shutdowns.
 author: Kiril Kirkov
 
 branding:
