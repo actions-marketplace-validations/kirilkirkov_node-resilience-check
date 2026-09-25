@@ -25,6 +25,8 @@ export interface VerifyCommandOptions {
   only?: CheckId[];
   verbose?: boolean;
   color: boolean;
+  /** Overrides the agent location; not exposed as a CLI flag. */
+  agentUrl?: string;
 }
 
 const CLEAR_LINE = '\r\u001b[2K';
@@ -135,6 +137,7 @@ export async function verifyCommand(options: VerifyCommandOptions): Promise<numb
               process.stderr.write(style.dim(`[service] ${line}\n`)),
           }
         : {}),
+      ...(options.agentUrl ? { agentUrl: options.agentUrl } : {}),
       onServiceSpawn: (spawned) => {
         service = spawned;
       },

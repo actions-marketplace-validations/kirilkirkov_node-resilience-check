@@ -1,0 +1,76 @@
+name: Action
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: action-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Runs the committed bundle exactly as consumers get it: no install, no build.
+  examples:
+    name: Action on the examples
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Fixed example
+        id: fixed
+        uses: ./
+        with:
+          config: examples/fixed-service/resiliencecheck.config.json
+          report-path: reports/fixed-service.json
+
+      - name: Broken example (expected to fail)
+        id: broken
+        uses: ./
+        continue-on-error: true
+        with:
+          config: examples/broken-service/resiliencecheck.config.json
+          report-path: reports/broken-service.json
+
+      - name: Assert the expected outcomes
+        env:
+          FIXED_OUTCOME: ${{ steps.fixed.outcome }}
+          FIXED_EXIT_CODE: ${{ steps.fixed.outputs.exit-code }}
+          BROKEN_OUTCOME: ${{ steps.broken.outcome }}
+          BROKEN_EXIT_CODE: ${{ steps.broken.outputs.exit-code }}
+        run: |
+          set -eu
+          test "$FIXED_OUTCOME" = success && test "$FIXED_EXIT_CODE" = 0
+          test "$BROKEN_OUTCOME" = failure && test "$BROKEN_EXIT_CODE" = 1
+          node -e '
+            const fixed = require("./reports/fixed-service.json");
+            const broken = require("./reports/broken-service.json");
+            if (fixed.exitCode !== 0 || broken.exitCode !== 1) process.exit(1);
+          '
+          echo "fixed-service passed, broken-service failed as expected."
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: resiliencecheck-reports
+          path: reports/
+
+      - name: Missing configuration (expected to fail)
+        id: missing
+        uses: ./
+        continue-on-error: true
+        with:
+          config: does-not-exist.json
+
+      - name: Assert the configuration error
+        env:
+          OUTCOME: ${{ steps.missing.outcome }}
+          EXIT_CODE: ${{ steps.missing.outputs.exit-code }}
+        run: test "$OUTCOME" = failure && test "$EXIT_CODE" = 2

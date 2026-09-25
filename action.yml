@@ -1,0 +1,45 @@
+name: ResilienceCheck
+description: Break your Node.js service before production does.
+author: Kiril Kirkov
+
+branding:
+  icon: shield
+  color: orange
+
+inputs:
+  config:
+    description: Path to the ResilienceCheck configuration file, relative to the repository root.
+    required: false
+    default: resiliencecheck.config.json
+  only:
+    description: >-
+      Comma-separated subset of checks to run (event-loop, backpressure, retry-storm,
+      concurrency, graceful-shutdown). Runs every enabled check when empty.
+    required: false
+    default: ''
+  seed:
+    description: Seed for randomized scheduling, to reproduce an earlier run. Random when empty.
+    required: false
+    default: ''
+  verbose:
+    description: Stream the service output into the log.
+    required: false
+    default: 'false'
+  report-path:
+    description: >-
+      Where to write the JSON report, relative to the repository root. Set to an empty
+      string to skip the report.
+    required: false
+    default: resiliencecheck-report.json
+
+outputs:
+  exit-code:
+    description: >-
+      The resilience-check verify exit code: 0 passed, 1 resilience problems found,
+      2 configuration or startup problem, 130 interrupted.
+  report-path:
+    description: Absolute path of the JSON report, when one was written.
+
+runs:
+  using: node24
+  main: dist/action/index.js

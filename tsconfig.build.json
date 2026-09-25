@@ -8,5 +8,6 @@
     "removeComments": false,
     "newLine": "lf"
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/action"]
 }

@@ -14,6 +14,7 @@ pnpm lint        # ESLint + Prettier check
 pnpm typecheck   # strict TypeScript over src/ and tests/
 pnpm test        # unit + integration tests (integration builds dist/ first)
 pnpm build       # compiles to dist/
+pnpm build:action # rebuilds the GitHub Action bundle in dist/action/; commit the result
 pnpm demo        # runs the CLI against examples/broken-service
 ```
 

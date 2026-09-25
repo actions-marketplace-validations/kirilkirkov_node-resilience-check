@@ -47,6 +47,10 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Action bundle is up to date
+        if: matrix.os == 'ubuntu-latest' && matrix.node == 22
+        run: pnpm check:action
+
       - name: Package contents
         if: matrix.os == 'ubuntu-latest' && matrix.node == 22
         run: npm pack --dry-run

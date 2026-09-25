@@ -77,6 +77,7 @@ telemetry — everything runs on your machine or CI runner and stays on `127.0.0
 
 - [Why](#why)
 - [Quick start](#quick-start)
+- [GitHub Action](#github-action)
 - [Supported checks](#supported-checks)
 - [Configuration](#configuration)
 - [How it works](#how-it-works)
@@ -133,6 +134,74 @@ npx node-resilience-check verify
 
 `init` guesses your start command from `package.json` and enables the two checks that work
 for any HTTP service. Point each check at a real endpoint and enable the others as needed.
+
+## GitHub Action
+
+ResilienceCheck is also published as a GitHub Action on the
+[GitHub Marketplace](https://github.com/marketplace/actions/resiliencecheck). It runs the same
+`resilience-check verify` as the CLI, from the code in the tag you pin, and fails the step when
+a check fails.
+
+```yaml
+name: ResilienceCheck
+
+on:
+  pull_request:
+
+jobs:
+  resilience:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm ci
+      - run: npm run build
+
+      - uses: kirilkirkov/node-resilience-check@v1
+        with:
+          config: resiliencecheck.config.json
+```
+
+The Action does not install or build your application. It starts the command from your
+configuration exactly as the CLI would, so the workflow must already have everything the
+service needs to run: checkout, Node.js **22.12 or newer** via `actions/setup-node`, installed
+dependencies and any build step. The Action itself runs on GitHub's Node.js 24 runtime; your
+service runs on the `node` that `setup-node` put on the `PATH`.
+
+| Input         | Default                       | CLI equivalent    |
+| ------------- | ----------------------------- | ----------------- |
+| `config`      | `resiliencecheck.config.json` | `--config <path>` |
+| `only`        | all enabled checks            | `--only <checks>` |
+| `seed`        | random                        | `--seed <number>` |
+| `verbose`     | `false`                       | `--verbose`       |
+| `report-path` | `resiliencecheck-report.json` | `--json <path>`   |
+
+Paths are relative to the repository root. Set `report-path: ''` to skip the report. The
+outputs are `exit-code` (the [CLI exit code](#ci-usage)) and `report-path` (absolute path of
+the report, when one was written).
+
+To keep the [JSON report](#json-report) as a build artifact, even when a check fails:
+
+```yaml
+- uses: kirilkirkov/node-resilience-check@v1
+  with:
+    config: resiliencecheck.config.json
+    report-path: resiliencecheck-report.json
+
+- uses: actions/upload-artifact@v4
+  if: always()
+  with:
+    name: resiliencecheck-report
+    path: resiliencecheck-report.json
+```
+
+The same [safe-use guidance](#security-and-safe-use) applies in CI: run it only against
+services you own or are authorized to test.
 
 ## Supported checks
 
@@ -415,7 +484,7 @@ walkthrough of each bug and fix.
 | `2`   | Configuration or startup problem — no checks were run                |
 | `130` | Interrupted                                                          |
 
-GitHub Actions example:
+GitHub Actions without the [GitHub Action](#github-action), using the CLI directly:
 
 ```yaml
 - uses: actions/setup-node@v4
@@ -563,7 +632,6 @@ of interest:
 - Docker Compose topology testing
 - Toxiproxy integration for richer network faults
 - JUnit output for CI dashboards
-- A GitHub Action wrapper
 
 Suggestions and use cases are welcome in the issue tracker.
 

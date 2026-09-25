@@ -40,6 +40,8 @@ export interface VerifyOptions {
   onServiceOutput?: (line: string) => void;
   /** Receives the process right after spawn, e.g. to kill it from an exit hook. */
   onServiceSpawn?: (service: ServiceProcess) => void;
+  /** Where the agent preload lives; bundled builds (the GitHub Action) ship their own copy. */
+  agentUrl?: string;
 }
 
 function errorMessage(error: unknown): string {
@@ -121,7 +123,7 @@ export async function runVerify(options: VerifyOptions): Promise<RunReport> {
 
     const env = buildServiceEnv(process.env, {
       config: config.service,
-      agentUrl: AGENT_URL,
+      agentUrl: options.agentUrl ?? AGENT_URL,
       reporterUrl: reporter.url,
       token,
       features: plan.some((check) => check.id === 'backpressure') ? ['backpressure'] : [],

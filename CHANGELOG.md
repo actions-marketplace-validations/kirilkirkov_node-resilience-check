@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+### Added
+
+- GitHub Action (`uses: kirilkirkov/node-resilience-check@v1`) with `config`, `only`, `seed`,
+  `verbose` and `report-path` inputs and `exit-code` / `report-path` outputs. It wraps
+  `resilience-check verify` and ships as a self-contained bundle in `dist/action/`.
+
 ## [0.1.0] - Unreleased
 
 First public version.

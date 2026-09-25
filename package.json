@@ -48,11 +48,14 @@
   },
   "files": [
     "dist",
+    "!dist/action",
     "CHANGELOG.md"
   ],
   "scripts": {
-    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "clean": "node scripts/clean.mjs",
     "build": "pnpm clean && tsc -p tsconfig.build.json",
+    "build:action": "node scripts/build-action.mjs",
+    "check:action": "pnpm build:action && git diff --exit-code --stat -- dist/action && test -z \"$(git status --porcelain -- dist/action)\"",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
@@ -67,8 +70,10 @@
     "commander": "^15.0.0"
   },
   "devDependencies": {
+    "@actions/core": "^3.0.1",
     "@eslint/js": "^10.0.1",
     "@types/node": "^22.20.4",
+    "esbuild": "^0.28.2",
     "eslint": "^10.11.0",
     "globals": "^17.12.0",
     "prettier": "^3.9.8",
